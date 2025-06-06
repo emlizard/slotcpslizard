@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Slot Line &amp; CPS Calculator (유효 유전율 출력)</title>
+  <title>Slot Line &amp; CPS Calculator (Effective Dielectric Constant Output)</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -77,7 +77,6 @@
       margin: 0 auto;
     }
   </style>
-  <!-- Polyfill for Math.sinh (if needed) -->
   <script>
     if (!Math.sinh) {
       Math.sinh = function(x) {
@@ -85,7 +84,6 @@
       };
     }
   </script>
-  <!-- MathJax for 수식 표기 -->
   <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script id="MathJax-script" async
     src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
@@ -93,225 +91,104 @@
 </head>
 <body>
   <h1>Slot Line &amp; CPS Calculator</h1>
-  
-  <!-- 공통 입력값 (Slot line 및 CPS 공용) -->
+
   <div class="common-container">
-    <h2>공통 입력값</h2>
+    <h2>Common Inputs</h2>
     <div>
-      <label for="common-h">기판 두께 (h) [mm]:</label>
+      <label for="common-h">Substrate Height (h) [mm]:</label>
       <input type="number" id="common-h" step="any" value="1.6"><br>
-      
-      <label for="common-eps">유전율 (εᵣ):</label>
+
+      <label for="common-eps">Dielectric Constant (εᵣ):</label>
       <input type="number" id="common-eps" step="any" value="4.4"><br>
-      
-      <label for="common-f">주파수 (f) [GHz]:</label>
+
+      <label for="common-f">Frequency (f) [GHz]:</label>
       <input type="number" id="common-f" step="any" value="1"><br>
     </div>
   </div>
-  
-  <!-- 단면 이미지 영역 -->
+
   <div class="diagram-container">
     <div class="diagram">
-      <h2>Slot Line 단면도</h2>
-      <img src="https://emlizard.github.io/main-page/images/diagram_Slot.png" alt="Slot Line 단면도">
+      <h2>Slot Line Cross-Section</h2>
+      <img src="https://emlizard.github.io/main-page/images/diagram_Slot.png" alt="Slot Line Diagram">
     </div>
     <div class="diagram">
-      <h2>CPS 단면도</h2>
-      <img src="https://emlizard.github.io/main-page/images/diagram_CPS.png" alt="CPS 단면도">
+      <h2>CPS Cross-Section</h2>
+      <img src="https://emlizard.github.io/main-page/images/diagram_CPS.png" alt="CPS Diagram">
     </div>
   </div>
-  
-  <!-- 계산 섹션: Slot Line과 CPS 계산기를 좌우로 배치 -->
+
   <div class="calc-container">
-    <!-- Slot Line 계산 섹션 -->
     <div class="section">
       <h2>Slot Line Calculator</h2>
-      <h3>특성 임피던스 계산 (Slot Line)</h3>
+      <h3>Characteristic Impedance (Slot Line)</h3>
       <div>
-        <label for="slot-s">슬롯 폭 (s) [mm]:</label>
+        <label for="slot-s">Slot Width (s) [mm]:</label>
         <input type="number" id="slot-s" step="any" value="0.5"><br>
-        <button type="button" onclick="calculateZ0_slot()">Z₀ 계산하기</button>
+        <button type="button" onclick="calculateZ0_slot()">Calculate Z₀</button>
       </div>
       <div id="resultZ0_slot" style="margin-top: 15px; font-weight: bold;"></div>
-      <h3>목표 Z₀에 따른 슬롯 폭 계산 (Slot Line)</h3>
+      <h3>Slot Width for Target Z₀</h3>
       <div>
-        <label for="slot-targetZ0">목표 Z₀ [Ohm]:</label>
+        <label for="slot-targetZ0">Target Z₀ [Ohm]:</label>
         <input type="number" id="slot-targetZ0" step="any" value="50"><br>
-        <button type="button" onclick="calculateS_slot()">s 계산하기</button>
+        <button type="button" onclick="calculateS_slot()">Calculate s</button>
       </div>
       <div id="resultS_slot" style="margin-top: 15px; font-weight: bold;"></div>
     </div>
-    
-    <!-- CPS 계산 섹션 -->
+
     <div class="section">
       <h2>CPS Calculator</h2>
-      <h3>특성 임피던스 계산 (CPS)</h3>
+      <h3>Characteristic Impedance (CPS)</h3>
       <div>
-        <label for="cps-W">도체 폭 (W) [mm]:</label>
+        <label for="cps-W">Conductor Width (W) [mm]:</label>
         <input type="number" id="cps-W" step="any" value="2.0"><br>
-        
-        <label for="cps-S">갭 (S) [mm]:</label>
+
+        <label for="cps-S">Gap (S) [mm]:</label>
         <input type="number" id="cps-S" step="any" value="0.5"><br>
-        <button type="button" onclick="calculateZ0_CPS()">Z₀ 계산하기</button>
+        <button type="button" onclick="calculateZ0_CPS()">Calculate Z₀</button>
       </div>
       <div id="resultZ0_CPS" style="margin-top: 15px; font-weight: bold;"></div>
-      <h3>목표 Z₀에 따른 갭 계산 (CPS)</h3>
+      <h3>Gap for Target Z₀</h3>
       <div>
-        <label for="cps-targetZ0">목표 Z₀ [Ohm]:</label>
+        <label for="cps-targetZ0">Target Z₀ [Ohm]:</label>
         <input type="number" id="cps-targetZ0" step="any" value="50"><br>
-        <button type="button" onclick="calculateS_CPS()">S 계산하기</button>
+        <button type="button" onclick="calculateS_CPS()">Calculate S</button>
       </div>
       <div id="resultS_CPS" style="margin-top: 15px; font-weight: bold;"></div>
     </div>
   </div>
-  
-  <!-- 사용 수식 및 참고 문헌 섹션 (생략 가능) -->
+
   <div class="formula">
-    <h2>사용 수식</h2>
+    <h2>Formulas</h2>
     <p>
       <strong>Slot Line:</strong><br>
-      정적 유전율 (대략):
+      Effective Dielectric Constant:
       \[
       \epsilon_{\mathrm{eff}} = \frac{\epsilon_r+1}{2} + \left(\epsilon_r-\frac{\epsilon_r+1}{2}\right)\left(1-e^{-f/f_p}\right),
       \quad f_p=\frac{c}{4h_m\sqrt{\epsilon_r}},
       \]
       where \(h_m = h/1000\) (m).<br>
-      특성 임피던스:
+      Characteristic Impedance:
       \[
       Z_{0,\mathrm{slot}}=\frac{60}{\sqrt{\epsilon_{\mathrm{eff}}}}\ln\!\left(\frac{1.9\,h_m}{s}\right).
       \]
     </p>
     <p>
       <strong>CPS:</strong><br>
-      정적 유전율은 슬롯라인과 동일하게 계산하고,  
-      특성 임피던스:
+      Effective Dielectric Constant is calculated same as Slot Line.<br>
+      Characteristic Impedance:
       \[
       Z_{0,\mathrm{CPS}}=\frac{30\pi}{\sqrt{\epsilon_{\mathrm{eff}}}}\frac{1}{\frac{W}{S}+1.393+0.667\ln\Bigl(\frac{W}{S}+1.444\Bigr)}.
       \]
     </p>
   </div>
-  
+
   <div class="references">
-    <h2>수식 출처 및 참고 문헌</h2>
+    <h2>References</h2>
     <p>
       <strong>Pozar – Microwave Engineering:</strong><br>
-      CPW, CPS 및 슬롯라인 설계 관련 기본 공식과 관련 경험적 접근.
+      Basic formulas and empirical approaches for CPW, CPS, and Slot Line design.
     </p>
   </div>
-  
-  <script>
-    // 상수
-    const c = 3e8; // m/s
-    
-    // 공통 입력값 읽기 (Slot Line & CPS 공용) – h는 mm→m, f는 그대로 (GHz)
-    function getCommonParams() {
-      let h_mm = parseFloat(document.getElementById("common-h").value);
-      let eps_r = parseFloat(document.getElementById("common-eps").value);
-      let f_GHz = parseFloat(document.getElementById("common-f").value);
-      return {
-        h: h_mm / 1000,
-        eps_r: eps_r,
-        f: f_GHz
-      };
-    }
-    
-    // ===== Slot Line 계산 =====
-    // 슬롯라인 유효 유전율 (f: GHz, h in m)
-    function effectiveDielectricSlot(eps_r, h, f_GHz) {
-      let f_Hz = f_GHz * 1e9;
-      let f_p = c / (4 * h * Math.sqrt(eps_r));
-      return (eps_r + 1) / 2 + (eps_r - (eps_r + 1) / 2) * (1 - Math.exp(-f_Hz / f_p));
-    }
-    
-    // 슬롯라인 특성 임피던스 계산 (s: 슬롯 폭, m)
-    function calcZ0_slot(eps_r, h, f_GHz, s) {
-      let eps_eff = effectiveDielectricSlot(eps_r, h, f_GHz);
-      return (60 / Math.sqrt(eps_eff)) * Math.log((1.9 * h) / s);
-    }
-    
-    // 슬롯라인 목표 s 계산 (해석적)
-    function calcS_slot(targetZ0, eps_r, h, f_GHz) {
-      let eps_eff = effectiveDielectricSlot(eps_r, h, f_GHz);
-      return (1.9 * h) / Math.exp((targetZ0 * Math.sqrt(eps_eff)) / 60);
-    }
-    
-    function calculateZ0_slot() {
-      let common = getCommonParams();
-      let s_mm = parseFloat(document.getElementById("slot-s").value);
-      let s = s_mm / 1000;
-      let Z0 = calcZ0_slot(common.eps_r, common.h, common.f, s);
-      let eps_eff = effectiveDielectricSlot(common.eps_r, common.h, common.f);
-      document.getElementById("resultZ0_slot").innerHTML = "Slot Line 특성 임피던스 Z₀ = " + Z0.toFixed(2) + " Ohm<br>유효 유전율 ε_eff = " + eps_eff.toFixed(3);
-    }
-    
-    function calculateS_slot() {
-      let common = getCommonParams();
-      let targetZ0 = parseFloat(document.getElementById("slot-targetZ0").value);
-      let s = calcS_slot(targetZ0, common.eps_r, common.h, common.f);
-      let s_mm = s * 1000;
-      document.getElementById("resultS_slot").innerHTML = "Slot Line 목표 Z₀ = " + targetZ0 + " Ohm 에 해당하는 슬롯 폭 s = " + s_mm.toFixed(4) + " mm";
-    }
-    
-    // ===== CPS 계산 =====
-    // CPS 유효 유전율 (슬롯라인과 동일한 방식)
-    function effectiveDielectricCPS(eps_r, h, f_GHz) {
-      let f_Hz = f_GHz * 1e9;
-      let f_p = c / (4 * h * Math.sqrt(eps_r));
-      return (eps_r + 1) / 2 + (eps_r - (eps_r + 1) / 2) * (1 - Math.exp(-f_Hz / f_p));
-    }
-    
-    // CPS 특성 임피던스 계산
-    // 입력: W (도체 폭, m), S (갭, m)
-    function calcZ0_CPS(W, S, eps_r, h, f_GHz) {
-      let eps_eff = effectiveDielectricCPS(eps_r, h, f_GHz);
-      let ratio = W / S;
-      let denom = ratio + 1.393 + 0.667 * Math.log(ratio + 1.444);
-      return (30 * Math.PI / Math.sqrt(eps_eff)) / denom;
-    }
-    
-    // Newton-Raphson으로 CPS의 갭 S (m) 찾기
-    function findS_CPS(targetZ0, W, eps_r, h, f_GHz) {
-      function f(S) {
-        return calcZ0_CPS(W, S, eps_r, h, f_GHz) - targetZ0;
-      }
-      function derivative(S) {
-        let dS = 1e-9;
-        return (f(S + dS) - f(S - dS)) / (2 * dS);
-      }
-      let S_guess = 0.1; // 초기 추정 (m)
-      let tol = 1e-9;
-      let maxIter = 100;
-      for (let i = 0; i < maxIter; i++) {
-        let f_val = f(S_guess);
-        let der = derivative(S_guess);
-        if (Math.abs(der) < 1e-12) break;
-        let S_next = S_guess - f_val / der;
-        if (Math.abs(S_next - S_guess) < tol) return S_next;
-        S_guess = S_next;
-      }
-      return S_guess;
-    }
-    
-    function calculateZ0_CPS() {
-      let common = getCommonParams();
-      let W_mm = parseFloat(document.getElementById("cps-W").value);
-      let S_mm = parseFloat(document.getElementById("cps-S").value);
-      let W = W_mm / 1000;
-      let S = S_mm / 1000;
-      let Z0 = calcZ0_CPS(W, S, common.eps_r, common.h, common.f);
-      let eps_eff = effectiveDielectricCPS(common.eps_r, common.h, common.f);
-      document.getElementById("resultZ0_CPS").innerHTML = "CPS 특성 임피던스 Z₀ = " + Z0.toFixed(2) + " Ohm<br>유효 유전율 ε_eff = " + eps_eff.toFixed(3);
-    }
-    
-    function calculateS_CPS() {
-      let common = getCommonParams();
-      let W_mm = parseFloat(document.getElementById("cps-W").value);
-      let W = W_mm / 1000;
-      let targetZ0 = parseFloat(document.getElementById("cps-targetZ0").value);
-      let S = findS_CPS(targetZ0, W, common.eps_r, common.h, common.f);
-      let S_mm = S * 1000;
-      document.getElementById("resultS_CPS").innerHTML = "CPS 목표 Z₀ = " + targetZ0 + " Ohm 에 해당하는 갭 S = " + S_mm.toFixed(4) + " mm";
-    }
-  </script>
 </body>
 </html>
